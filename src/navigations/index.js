@@ -1,14 +1,12 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SafeAreaView} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import {useSelector} from 'react-redux';
 import MainNav from './mainNavigations';
 import RootNav from './rootNavigations';
 
 export default function NavigationProvider(params) {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-  const isLoggedIn = false;
+  const state = useSelector(state => state);
+  const isLoggedIn = state.LoginReducer.isLoggedIn;
   return (
     <SafeAreaView style={{flex: 1}}>
       {isLoggedIn ? <MainNav /> : <RootNav />}

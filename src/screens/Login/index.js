@@ -4,17 +4,31 @@ import {Button} from '../../components';
 import HeaderInput from './HeaderInput';
 import styles from './styles';
 import {useForm, formMaker} from '../../hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {login} from '../../containers/LoginContainer/actions';
 
-export default function Login({navigation}) {
+export default function Login({}) {
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
+  const username = state.LoginReducer.username;
+  const password = state.LoginReducer.password;
   /* refs */
   const passwordRef = useRef({});
   /* hooks */
   const {errors, handleChange, handleSubmit} = useForm({
     validationSchema: {
-      email: ({value}) => formMaker(value).email('enter a valid email'),
-      password: ({value}) => formMaker(value)._null('enter a your password'),
+      email: ({value}) =>
+        formMaker(value).email('enter a valid email') ||
+        formMaker(value).isEqual(username, 'email is not valid'),
+      password: ({value}) =>
+        formMaker(value)._null('enter a your password') ||
+        formMaker(value).isEqual(password, 'password is not valid'),
     },
     initialValues: {email: null, password: null},
+    onSubmit: () => {
+      alert('login successfull');
+      dispatch(login());
+    },
   });
   return (
     <View style={styles._main}>
